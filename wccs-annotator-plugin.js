@@ -1,11 +1,11 @@
 "use strict";
 
 if (Annotator.Plugin) {
-	Annotator.Plugin.WCTS = function (element) {
+	Annotator.Plugin.WCCS = function (element) {
 		return {
 			pluginInit: function() {
 				function referenceTypeFieldLoad(field, annotation) {
-					if (annotation.referenceType) {
+					if (annotation.type) {
 						field.innerHTML = "";
 
 						let container = document.createElement("div");
