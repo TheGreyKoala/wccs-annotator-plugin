@@ -1,50 +1,68 @@
 "use strict";
 
 if (Annotator.Plugin) {
-	Annotator.Plugin.WCCS = function (element) {
-		return {
-			pluginInit: function() {
-				function referenceTypeFieldLoad(field, annotation) {
-					if (annotation.type) {
-						field.innerHTML = "";
+    console.log("Annotator.Plugin found");
+    Annotator.Plugin.wccs = function (element) {
+        console.log("Registering WCCS Plugin");
+        return {
+            pluginInit: function () {
+                function classFieldLoad(field, annotation, editMode) {
+                    console.log("In pluginInid");
+                    if (annotation.wccs.featureKind) {
+                        field.innerHTML = "";
 
-						let container = document.createElement("div");
-						field.appendChild(container);
+                        let container = document.createElement("div");
+                        container.style.padding = "12px 8px";
 
-						let label = document.createElement("label");
-						label.innerHTML = "Reference Type: ";
-						container.appendChild(label);
+                        let label = document.createElement("label");
+                        label.innerHTML = "Class:";
+                        label.style.color = "#3c3c3c";
 
-						let select = document.createElement("select");
-						let newsDetailPageOption = document.createElement("option");
-						newsDetailPageOption.value = "NewsDetailPage";
-						newsDetailPageOption.text = "News Detail Page";
-						select.add(newsDetailPageOption);
+                        let select = document.createElement("select");
+                        let newsDetailPageOption = document.createElement("option");
+                        newsDetailPageOption.value = "NewsDetailPage";
+                        newsDetailPageOption.text = "News Detail Page";
+                        select.add(newsDetailPageOption);
+                        select.style.color = "#3c3c3c";
 
-						for (let i = 1; i <= 3; i++) {
-							let option = document.createElement("option");
-							option.value = "type" + i;
-							option.text = "Type " + i;
-							select.add(option);
-						}
+                        for (let i = 1; i <= 3; i++) {
+                            let option = document.createElement("option");
+                            option.value = "type" + i;
+                            option.text = "Type " + i;
+                            option.style.color = "#3c3c3c";
+                            select.add(option);
+                        }
 
-						if (annotation.referenceType) {
-							select.value = annotation.referenceType;
-						}
+                        select.value = annotation.wccs.class;
 
-						container.appendChild(select);
-					}
-				}
+                        if (editMode) {
+                            field.appendChild(container);
+                            container.appendChild(label);
+                            container.appendChild(select);
+                            select.style.width = "80%";
+                            select.style.marginLeft = "10px";
+                        } else {
+                            field.appendChild(label);
+                            field.appendChild(select);
+                            label.style.width = "15%";
+                            select.style.width = "85%";
+                        }
+                    }
+                }
 
-				this.annotator.viewer.addField({ label: "Reference Type", load: referenceTypeFieldLoad });
-				this.annotator.editor.addField({
-					label: "Reference Type",
-					load: referenceTypeFieldLoad,
-					submit: function(field, annotation) {
-						annotation.referenceType = field.getElementsByTagName("select")[0].value;
-					}
-				});
-			}
-		};
-	};
+                console.log("In pluginInit");
+                this.annotator.viewer.addField({label: "Class", load: (field, annotation) => classFieldLoad(field, annotation, false)});
+                this.annotator.editor.addField({
+                    label: "Class",
+                    load: (field, annotation) => classFieldLoad(field, annotation, true),
+                    submit: function (field, annotation) {
+                        console.log("In submit");
+                        annotation.referenceType = field.getElementsByTagName("select")[0].value;
+                    }
+                });
+            }
+        };
+    };
+} else {
+    console.log("Annotator.Plugin found");
 }
