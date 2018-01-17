@@ -40,7 +40,7 @@ if (Annotator.Plugin) {
             pluginInit: function () {
                 function classFieldLoad(field, annotation, editMode) {
                     console.debug("Loading WCCS plugin field.");
-                    if (annotation.wccs.featureKind) {
+                    if (annotation.wccs && annotation.wccs.featureKind) {
                         field.innerHTML = "";
 
                         const container = document.createElement("div");
@@ -54,7 +54,7 @@ if (Annotator.Plugin) {
                             const select = document.createElement("select");
                             select.style.color = "#3c3c3c";
 
-                            const classes = annotation.wccs.featureKind === "property" ? contentClasses : referenceClasses;
+                            const classes = annotation.wccs.featureKind === "content" ? contentClasses : referenceClasses;
                             classes.forEach(aClass => {
                                 const option = document.createElement("option");
                                 option.value = aClass.name;
